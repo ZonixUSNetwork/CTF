@@ -2,10 +2,9 @@ package us.zonix.ctf.nametags
 
 import cc.fyre.proton.nametag.construct.NameTagInfo
 import cc.fyre.proton.nametag.provider.NameTagProvider
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
-import us.zonix.ctf.CTFPlugin
+import us.zonix.ctf.CTF
 import us.zonix.ctf.game.Team
 import java.util.*
 
@@ -16,7 +15,7 @@ class Nametags : NameTagProvider("Nametags Provider", 5) {
         //val prefixColor = getNameColor(toRefresh, refreshFor)
         var color: ChatColor? = null
 
-        when (CTFPlugin.instance.gameManager.getTeam(toRefresh)) {
+        when (CTF.instance.gameManager.getTeam(toRefresh)) {
             Team.RED -> {
                 color = ChatColor.RED
                 return createNameTag(color.toString().replace("&", "§"), "")

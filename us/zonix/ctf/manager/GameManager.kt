@@ -1,6 +1,8 @@
 package us.zonix.ctf.manager
 
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import us.zonix.ctf.CTF
 import us.zonix.ctf.game.State
 import us.zonix.ctf.game.Team
 import java.util.*
@@ -49,6 +51,16 @@ class GameManager {
         }
     }
 
+    fun endGame() {
+        gameState = State.END
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.inventory.clear()
+            player.allowFlight = true
+
+        }
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "reboot 30s")
+    }
+
     fun getRed(): Int {
         return red.size
     }
@@ -81,6 +93,10 @@ class GameManager {
 
     fun getState(): State {
         return gameState
+    }
+
+    fun setState(game: State) {
+        gameState = game
     }
 
 }

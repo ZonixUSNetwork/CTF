@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender
 import us.zonix.ctf.events.GameStartEvent
 
 object GameCommand {
+
+    @JvmStatic
     @Command(
         names = ["game"],
         permission = "rank.admin"
@@ -14,6 +16,7 @@ object GameCommand {
         sender.sendMessage("§cUsage /game <start>")
     }
 
+    @JvmStatic
     @Command(
         names = ["game start"],
         permission = "rank.admin"

@@ -1,5 +1,5 @@
 name: ctf
-main: us.zonix.ctf.CTFPlugin
+main: us.zonix.ctf.CTF
 version: 1.0-SNAPSHOT
 depend:
   - Proton
