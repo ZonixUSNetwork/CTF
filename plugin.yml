@@ -1,0 +1,5 @@
+name: ctf
+main: us.zonix.ctf.CTFPlugin
+version: 1.0-SNAPSHOT
+depend:
+  - Proton
