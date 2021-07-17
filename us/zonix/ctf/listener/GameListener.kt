@@ -3,29 +3,23 @@ package us.zonix.ctf.listener
 import com.lunarclient.bukkitapi.LunarClientAPI
 import com.lunarclient.bukkitapi.`object`.LCWaypoint
 import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
-import com.lunarclient.bukkitapi.title.LCTitleBuilder
-import com.lunarclient.bukkitapi.title.TitleType
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.Material
+import org.bukkit.*
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.*
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerMoveEvent
-import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.event.player.PlayerRespawnEvent
-import org.bukkit.inventory.ItemStack
+import org.bukkit.event.player.*
+import org.bukkit.util.Vector
 import us.zonix.ctf.CTF
 import us.zonix.ctf.events.GameStartEvent
 import us.zonix.ctf.game.State
 import us.zonix.ctf.game.Team
+import us.zonix.ctf.utils.SoundUtil
 import java.awt.Color
 
 class GameListener : Listener {
@@ -112,6 +106,7 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
                 Bukkit.broadcastMessage("§9${player.name} §fhas picked up the §c§lRED §fflag.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
+                SoundUtil.playSound(Sound.GHAST_SCREAM2)
                 CTF.instance.flagManager.redFlagHolder = player
                 CTF.instance.kitManager.giveBlueFlag(player, Team.RED)
             }
@@ -142,6 +137,7 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
                 Bukkit.broadcastMessage("§9${player.name} §fhas picked up the §c§lRED §fflag.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
+                SoundUtil.playSound(Sound.GHAST_SCREAM2)
                 CTF.instance.kitManager.giveRedFlag(player, Team.RED)
                 CTF.instance.flagManager.redFlagHolder = player
             }
@@ -156,6 +152,21 @@ class GameListener : Listener {
     @EventHandler
     fun onPlayerItemDropEvent(event: PlayerDropItemEvent) {
         event.isCancelled = !event.player.gameMode.equals(GameMode.CREATIVE)
+    }
+
+    @EventHandler
+    fun onInteractEvent(event: PlayerInteractEvent) {
+        if (event.action != Action.PHYSICAL) {
+            return
+        }
+        if (event.clickedBlock.type == Material.IRON_PLATE) {
+            val vector: Vector = event.player.getEyeLocation().getDirection()
+            vector.multiply(1.0F)
+            vector.setY(2.0)
+            event.player.velocity = vector
+            SoundUtil.playSound(Sound.HORSE_ARMOR, event.player.location)
+        }
+
     }
 
     /*/@EventHandler
@@ -179,6 +190,28 @@ class GameListener : Listener {
     }*/
 
     @EventHandler
+    fun onEntityDamageByEntity(event: EntityDamageByEntityEvent) {
+        if (event.entity !is Player) {
+            return
+        }
+        if (event.damager !is  Player) {
+            return
+        }
+        var player = event.entity as Player
+        var damager = event.damager as Player
+        if (CTF.instance.gameManager.getTeam(player) == Team.RED && CTF.instance.gameManager.getTeam(damager) == Team.RED) {
+            damager.sendMessage("§cYou cannot damage your teammates.")
+            event.isCancelled = true
+            return
+        }
+        if (CTF.instance.gameManager.getTeam(player) == Team.BLUE && CTF.instance.gameManager.getTeam(damager) == Team.BLUE) {
+            damager.sendMessage("§cYou cannot damage your teammates.")
+            event.isCancelled = true
+            return
+        }
+    }
+
+    @EventHandler
     fun onEntityDamage(event: EntityDamageEvent) {
         if (event.entity !is Player) {
             return
@@ -198,6 +231,9 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§9${player.name} §fhas died with the §c§lRED §fflag")
                 Bukkit.broadcastMessage("§fThe §cflag §fhas been returned.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
+                player.teleport(Location(Bukkit.getWorld("world"), -38.5, 72.0, 76.5))
+                SoundUtil.playSound(Sound.IRONGOLEM_DEATH)
+                CTF.instance.kitManager.giveRedKit(player, Team.RED)
                 return
             }
             if (CTF.instance.flagManager.blueFlagHolder == player) {
@@ -206,6 +242,9 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§c${player.name} §fhas died with the §9§lBLUE §fflag")
                 Bukkit.broadcastMessage("§fThe §cflag §fhas been returned.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
+                player.teleport(Location(Bukkit.getWorld("world"), 39.5, 72.0, -83.5))
+                SoundUtil.playSound(Sound.IRONGOLEM_DEATH)
+                CTF.instance.kitManager.giveBlueKit(player, Team.RED)
                 return
             }
 

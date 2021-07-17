@@ -19,13 +19,13 @@ class JoinListener : Listener {
         if (CTF.instance.gameManager.getState() == State.LOBBY) {
             if (!player.hasPermission("rank.staff"))
                 Bukkit.broadcastMessage("§a${player.name} has joined the game")
-            player.inventory.clear()
             for (i in 0..3) {
                 player.inventory.armorContents[i] = null
             }
             player.health = 20.0
             player.foodLevel = 20
-            player.teleport(Location(Bukkit.getWorld("world"), 0.5, 64.0, -3.5))
+            CTF.instance.kitManager.clearInventory(player)
+            player.teleport(Location(Bukkit.getWorld("world"), 0.5, 135.0, -3.5))
             if (Bukkit.getOnlinePlayers().size >= 8) {
                 Bukkit.broadcastMessage("§aGame is starting in 10s.")
                 Bukkit.getScheduler().runTaskLater(CTF.instance, {

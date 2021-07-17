@@ -21,6 +21,7 @@ public class CTF extends JavaPlugin {
     public FlagManager flagManager = new FlagManager();
     public KitManager kitManager = new KitManager();
 
+
     @Override
     public void onEnable() {
         instance = this;

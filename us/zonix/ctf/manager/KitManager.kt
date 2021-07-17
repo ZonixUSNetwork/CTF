@@ -11,6 +11,14 @@ import us.zonix.ctf.utils.ItemBuilder
 
 class KitManager {
 
+    fun clearInventory(player: Player) {
+        player.inventory.helmet = null
+        player.inventory.chestplate = null
+        player.inventory.leggings = null
+        player.inventory.boots = null
+        player.inventory.clear()
+    }
+
     fun giveRedKit(player: Player, team: Team) {
         var sword = ItemBuilder(Material.STONE_SWORD, 1).setName("Sword").toItemStack()
         var bread = ItemBuilder(Material.BREAD, 16).toItemStack()
@@ -19,6 +27,7 @@ class KitManager {
         var chestplate = ArmorUtil.generate(Material.LEATHER_CHESTPLATE, Color.RED)
         var leggings = ArmorUtil.generate(Material.LEATHER_LEGGINGS, Color.RED)
         var boots = ArmorUtil.generate(Material.LEATHER_BOOTS, Color.RED)
+        clearInventory(player)
         player.inventory.helmet = helmet
         player.inventory.chestplate = chestplate
         player.inventory.leggings = leggings
@@ -36,6 +45,7 @@ class KitManager {
         var chestplate = ArmorUtil.generate(Material.LEATHER_CHESTPLATE, Color.BLUE)
         var leggings = ArmorUtil.generate(Material.LEATHER_LEGGINGS, Color.BLUE)
         var boots = ArmorUtil.generate(Material.LEATHER_BOOTS, Color.BLUE)
+        clearInventory(player)
         player.inventory.helmet = helmet
         player.inventory.chestplate = chestplate
         player.inventory.leggings = leggings
@@ -51,7 +61,7 @@ class KitManager {
         var leggings = ArmorUtil.generate(Material.LEATHER_LEGGINGS, Color.BLUE)
         var boots = ArmorUtil.generate(Material.LEATHER_BOOTS, Color.BLUE)
         var wool = ItemBuilder(Material.WOOL).setDyeColor(DyeColor.RED).toItemStack()
-
+        clearInventory(player)
         player.inventory.helmet = wool
         player.inventory.chestplate = chestplate
         player.inventory.leggings = leggings
@@ -68,7 +78,7 @@ class KitManager {
         var leggings = ArmorUtil.generate(Material.LEATHER_LEGGINGS, Color.RED)
         var boots = ArmorUtil.generate(Material.LEATHER_BOOTS, Color.RED)
         var wool = ItemBuilder(Material.WOOL).setDyeColor(DyeColor.BLUE).toItemStack()
-
+        clearInventory(player)
         player.inventory.helmet = wool
         player.inventory.chestplate = chestplate
         player.inventory.leggings = leggings
