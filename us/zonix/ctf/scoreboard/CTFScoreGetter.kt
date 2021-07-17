@@ -1,6 +1,7 @@
 package us.zonix.ctf.scoreboard
 
 import cc.fyre.proton.scoreboard.construct.ScoreGetter
+import me.kansio.modmode.ModMode
 import org.bukkit.Bukkit
 import java.util.LinkedList
 import org.bukkit.entity.Player
@@ -31,8 +32,18 @@ class CTFScoreGetter : ScoreGetter {
                 else CTF.instance.flagManager.redFlagHolder!!.name
             ))
             scores.add(" ")
-            scores.add("§fKills: §c" + CTF.instance.gameManager.getKills(player))
-            scores.add("§fDeaths: §c" + CTF.instance.gameManager.getDeaths(player))
+            if (!ModMode.getInstance().modModeManager.isInModMode(player)) {
+                scores.add("§fKills: §c" + CTF.instance.gameManager.getKills(player))
+                scores.add("§fDeaths: §c" + CTF.instance.gameManager.getDeaths(player))
+            } else {
+                scores.add("§4§lMod Mode:")
+                scores.add(" §fVanish§7: " + (
+                        if (ModMode.getInstance().vanishManager.isVanished(player))
+                            "§aOn"
+                        else
+                            "§cOff"
+                    ))
+            }
         }
         if (CTF.instance.gameManager.getState() == State.END) {
             scores.add("§fGame has §cended§f.")

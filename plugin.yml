@@ -3,3 +3,4 @@ main: us.zonix.ctf.CTF
 version: 1.0-SNAPSHOT
 depend:
   - Proton
+  - LunarClient-API

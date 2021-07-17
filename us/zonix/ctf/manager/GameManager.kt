@@ -1,5 +1,7 @@
 package us.zonix.ctf.manager
 
+import com.lunarclient.bukkitapi.LunarClientAPI
+import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import us.zonix.ctf.CTF
@@ -21,6 +23,14 @@ class GameManager {
 
     fun isSpectator(player: Player): Boolean {
         return spectators.contains(player.uniqueId)
+    }
+
+    fun removeRed(player: Player) {
+        red.remove(player.uniqueId)
+    }
+
+    fun removeBlue(player: Player) {
+        blue.remove(player.uniqueId)
     }
 
     fun isPlaying(player: Player): Boolean {
@@ -51,11 +61,18 @@ class GameManager {
         }
     }
 
-    fun endGame() {
+    fun endGame(winner: Team) {
         gameState = State.END
         for (player in Bukkit.getOnlinePlayers()) {
             player.inventory.clear()
             player.allowFlight = true
+            if (getTeam(player) == winner) {
+                LunarClientAPI.getInstance()
+                    .sendPacket(player, LCPacketTitle("§6§lVICTORY!", "§fYour team §bcaptured§f the §cenemy§f's flag!", 5, 1, 1))
+            } else {
+                LunarClientAPI.getInstance()
+                    .sendPacket(player, LCPacketTitle("§c§lGAME OVER!", "§fYour flag was §bcaptured§f by the §cenemy team§f.", 5, 1, 1))
+            }
 
         }
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "reboot 30s")
