@@ -8,13 +8,13 @@ object SoundUtil {
 
     fun playSound(sound: Sound, loc: Location) {
         for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(loc, sound, 10f, 10f)
+            player.playSound(loc, sound, 10f, 5f)
         }
     }
 
     fun playSound(sound: Sound) {
         for (player in Bukkit.getOnlinePlayers()) {
-            player.playSound(player.location, sound, 10f, 10f)
+            player.playSound(player.location, sound, 10f, 5f)
         }
     }
 

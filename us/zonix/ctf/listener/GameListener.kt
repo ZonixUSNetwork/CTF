@@ -44,6 +44,31 @@ class GameListener : Listener {
             }
         }
         CTF.instance.gameManager.setState(State.GAME)
+
+
+        /*/Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
+            var blueFlag: Location? = null
+            var redFlag: Location? = null
+            if (CTF.instance.flagManager.blueFlagHolder != null) {
+                blueFlag = CTF.instance.flagManager.blueFlagHolder!!.location
+            }
+            if (CTF.instance.flagManager.redFlagHolder != null) {
+                redFlag = CTF.instance.flagManager.redFlagHolder!!.location
+            }
+            for (player in Bukkit.getOnlinePlayers()) {
+                if (redFlag != null) {
+                    LunarClientAPI.getInstance().removeWaypoint(player, LCWaypoint())
+                    LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Red Flag", redFlag, Color.RED.rgb, true))
+                } else {
+                    LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Red Flag", Location(Bukkit.getWorld("world"), 32.0, 66.0, 80.0), Color.RED.rgb, true))
+                }
+                if (blueFlag != null) {
+                    LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Blue Flag", blueFlag, Color.BLUE.rgb, true))
+                } else {
+                    LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Blue Flag", Location(Bukkit.getWorld("world"), -31.5, 66.0, -87.5), Color.BLUE.rgb, true))
+                }
+            }
+        }, 20L, 80L)*/
     }
 
     @EventHandler

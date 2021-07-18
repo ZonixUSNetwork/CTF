@@ -7,6 +7,7 @@ import java.util.LinkedList
 import org.bukkit.entity.Player
 import us.zonix.ctf.CTF
 import us.zonix.ctf.game.State
+import kotlin.math.roundToInt
 
 class CTFScoreGetter : ScoreGetter {
 
@@ -22,22 +23,23 @@ class CTFScoreGetter : ScoreGetter {
             scores.add("  §fFlag: §c" + (
                     if (CTF.instance.flagManager.blueFlagHolder == null)
                         "At base"
-                    else CTF.instance.flagManager.blueFlagHolder!!.name
+                    else CTF.instance.flagManager.blueFlagHolder!!.name + " (${CTF.instance.flagManager.blueFlagHolder!!.location.x}, ${CTF.instance.flagManager.blueFlagHolder!!.location.z})"
                     ))
             scores.add("§c§lRed Team:")
             scores.add("§c  §fPlayers§7: §4" + CTF.instance.gameManager.getRed())
             scores.add("§c  §fFlag: §c" + (
                 if (CTF.instance.flagManager.redFlagHolder == null)
                     "At base"
-                else CTF.instance.flagManager.redFlagHolder!!.name
+                else CTF.instance.flagManager.redFlagHolder!!.name + " (${CTF.instance.flagManager.redFlagHolder!!.location.x.roundToInt()}, ${CTF.instance.flagManager.redFlagHolder!!.location.z.roundToInt()})"
             ))
             scores.add(" ")
             if (!ModMode.getInstance().modModeManager.isInModMode(player)) {
-                scores.add("§fKills: §c" + CTF.instance.gameManager.getKills(player))
-                scores.add("§fDeaths: §c" + CTF.instance.gameManager.getDeaths(player))
+                scores.add("§4§lStats:")
+                scores.add("  §fKills: §c" + CTF.instance.gameManager.getKills(player))
+                scores.add("  §fDeaths: §c" + CTF.instance.gameManager.getDeaths(player))
             } else {
                 scores.add("§4§lMod Mode:")
-                scores.add(" §fVanish§7: " + (
+                scores.add("  §fVanish§7: " + (
                         if (ModMode.getInstance().vanishManager.isVanished(player))
                             "§aOn"
                         else

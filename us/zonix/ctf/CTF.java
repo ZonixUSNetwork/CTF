@@ -9,7 +9,9 @@ import us.zonix.ctf.manager.FlagManager;
 import us.zonix.ctf.manager.GameManager;
 import us.zonix.ctf.manager.KitManager;
 import us.zonix.ctf.manager.MapManager;
+import us.zonix.ctf.nametags.Nametags;
 import us.zonix.ctf.scoreboard.Scoreboard;
+import us.zonix.ctf.utils.RandomFireWork;
 
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class CTF extends JavaPlugin {
         instance = this;
         Proton.getInstance().getCommandHandler().registerAll(this);
         Proton.getInstance().getScoreboardHandler().setConfiguration(Scoreboard.create());
+        Proton.getInstance().getNameTagHandler().registerProvider(new Nametags());
+        RandomFireWork.addColors();
         registerListeners();
     }
 

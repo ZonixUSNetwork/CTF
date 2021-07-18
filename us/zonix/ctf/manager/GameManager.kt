@@ -3,10 +3,15 @@ package us.zonix.ctf.manager
 import com.lunarclient.bukkitapi.LunarClientAPI
 import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
 import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
+import org.bukkit.Location
 import org.bukkit.entity.Player
 import us.zonix.ctf.CTF
 import us.zonix.ctf.game.State
 import us.zonix.ctf.game.Team
+import us.zonix.ctf.utils.InstantFirework
+import us.zonix.ctf.utils.RandomFireWork
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -63,6 +68,11 @@ class GameManager {
 
     fun endGame(winner: Team) {
         gameState = State.END
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
+            var randomInt = kotlin.random.Random.nextInt(-100, 100)
+            var location = Location(Bukkit.getWorld("world"), (0 + randomInt).toDouble(), 90.0, (0 + randomInt).toDouble())
+            InstantFirework(FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(RandomFireWork.getRandomColor()).build(), location)
+        }, 5L, 5L)
         for (player in Bukkit.getOnlinePlayers()) {
             player.inventory.clear()
             player.allowFlight = true
