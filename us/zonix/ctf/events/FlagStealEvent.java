@@ -4,11 +4,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import us.zonix.ctf.game.Team;
 
-public class GameStartEvent extends Event implements Cancellable {
+public class FlagStealEvent extends Event implements Cancellable {
 
-    public GameStartEvent() {
+    private Team flag;
+    private Player player;
 
+    public FlagStealEvent(Team flag, Player player) {
+        this.flag = flag;
+        this.player = player;
+    }
+
+    public Team getFlag() {
+        return flag;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override

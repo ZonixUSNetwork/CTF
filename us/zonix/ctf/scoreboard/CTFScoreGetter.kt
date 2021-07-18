@@ -23,7 +23,7 @@ class CTFScoreGetter : ScoreGetter {
             scores.add("  §fFlag: §c" + (
                     if (CTF.instance.flagManager.blueFlagHolder == null)
                         "At base"
-                    else CTF.instance.flagManager.blueFlagHolder!!.name + " (${CTF.instance.flagManager.blueFlagHolder!!.location.x}, ${CTF.instance.flagManager.blueFlagHolder!!.location.z})"
+                    else CTF.instance.flagManager.blueFlagHolder!!.name + " (${CTF.instance.flagManager.blueFlagHolder!!.location.x.roundToInt()}, ${CTF.instance.flagManager.blueFlagHolder!!.location.z.roundToInt()})"
                     ))
             scores.add("§c§lRed Team:")
             scores.add("§c  §fPlayers§7: §4" + CTF.instance.gameManager.getRed())

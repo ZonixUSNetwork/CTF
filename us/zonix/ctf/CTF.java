@@ -3,6 +3,7 @@ package us.zonix.ctf;
 import cc.fyre.proton.Proton;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import us.zonix.ctf.listener.FlagListener;
 import us.zonix.ctf.listener.GameListener;
 import us.zonix.ctf.listener.JoinListener;
 import us.zonix.ctf.manager.FlagManager;
@@ -36,6 +37,7 @@ public class CTF extends JavaPlugin {
 
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new GameListener(), this);
+        Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
     }
 

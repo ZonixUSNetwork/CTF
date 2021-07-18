@@ -1,13 +1,12 @@
 package us.zonix.ctf.events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class GameStartEvent extends Event implements Cancellable {
+public class GameEndEvent extends Event implements Cancellable {
 
-    public GameStartEvent() {
+    public GameEndEvent() {
 
     }
 

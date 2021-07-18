@@ -6,6 +6,7 @@ import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
 import org.bukkit.*
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -16,6 +17,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.util.Vector
 import us.zonix.ctf.CTF
+import us.zonix.ctf.events.FlagCaptureEvent
+import us.zonix.ctf.events.FlagStealEvent
 import us.zonix.ctf.events.GameStartEvent
 import us.zonix.ctf.game.State
 import us.zonix.ctf.game.Team
@@ -96,8 +99,7 @@ class GameListener : Listener {
         val player = event.player
         if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
             event.getFrom().getBlockZ() == event.getTo().getBlockZ() &&
-            event.getFrom().getBlockY() == event.getTo().getBlockY()
-        ) {
+            event.from.getBlockY() == event.getTo().getBlockY()) {
             return
         }
 
@@ -106,65 +108,29 @@ class GameListener : Listener {
         }
 
         if (event.to.block.getRelative(BlockFace.DOWN).type == Material.LAPIS_BLOCK) {
-            if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
-                if (CTF.instance.flagManager.redFlagHolder == null) {
-                    return
+            if (CTF.instance.gameManager.getTeam(player) == Team.RED) { //if they're on the red team
+                if (CTF.instance.flagManager.blueFlagHolder == null) { //check if blue's flag holder is null, if it is, give the player the flag.
+                    CTF.instance.flagManager.blueFlagHolder = player //set the holder to the stealer
+                    Bukkit.getPluginManager().callEvent(FlagStealEvent(Team.BLUE, player)) //blue's flag got stolen, call the event.
                 }
-                if (CTF.instance.flagManager.redFlagHolder != player) {
-                    return
+            } else if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) { //check if they're returning red's flag to blue flag
+                if (CTF.instance.flagManager.redFlagHolder != null && CTF.instance.flagManager.redFlagHolder == player) { //not null & red holder = player
+                    Bukkit.getPluginManager().callEvent(FlagCaptureEvent(Team.BLUE, player))
+                    CTF.instance.flagManager.redFlagHolder = null //set it back to null
                 }
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§9${player.name} §fhas captured the §c§lRED §fflag.")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage(" ")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§9§lBLUE §fteam has won the game!")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                CTF.instance.kitManager.giveBlueKit(player, Team.RED)
-                CTF.instance.gameManager.endGame(Team.BLUE)
-            }
-
-            if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
-                if (CTF.instance.flagManager.redFlagHolder != null) {
-                    return
-                }
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§9${player.name} §fhas picked up the §c§lRED §fflag.")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                SoundUtil.playSound(Sound.GHAST_SCREAM2)
-                CTF.instance.flagManager.redFlagHolder = player
-                CTF.instance.kitManager.giveBlueFlag(player, Team.RED)
             }
         }
         if (event.to.block.getRelative(BlockFace.DOWN).type == Material.REDSTONE_BLOCK) {
-            if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
-                if (CTF.instance.flagManager.redFlagHolder == null) {
-                    return
+            if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) { //if they're on the blue team
+                if (CTF.instance.flagManager.redFlagHolder == null) { //check if red's flag holder is null, if it is, give the player the flag.
+                    CTF.instance.flagManager.redFlagHolder = player //set the holder to the stealer
+                    Bukkit.getPluginManager().callEvent(FlagStealEvent(Team.RED, player)) //reds's flag got stolen, call the event.
                 }
-                if (CTF.instance.flagManager.redFlagHolder != player) {
-                    return
+            } else if (CTF.instance.gameManager.getTeam(player) == Team.RED) { //check if they're returning blue's flag to red flag
+                if (CTF.instance.flagManager.blueFlagHolder != null && CTF.instance.flagManager.blueFlagHolder == player) { //not null & blue holder = player
+                    Bukkit.getPluginManager().callEvent(FlagCaptureEvent(Team.RED, player))
+                    CTF.instance.flagManager.blueFlagHolder = null //set it back to null
                 }
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§c${player.name} §fhas captured the §9§lBLUE §fflag.")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage(" ")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§c§lRED §fteam has won the game!")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                CTF.instance.kitManager.giveRedFlag(player, Team.BLUE)
-                CTF.instance.gameManager.endGame(Team.RED)
-            }
-
-            if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
-                if (CTF.instance.flagManager.redFlagHolder != null) {
-                    return
-                }
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                Bukkit.broadcastMessage("§9${player.name} §fhas picked up the §c§lRED §fflag.")
-                Bukkit.broadcastMessage("§7§m------------------------------------------")
-                SoundUtil.playSound(Sound.GHAST_SCREAM2)
-                CTF.instance.kitManager.giveRedFlag(player, Team.RED)
-                CTF.instance.flagManager.redFlagHolder = player
             }
         }
     }
