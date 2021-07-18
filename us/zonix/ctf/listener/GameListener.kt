@@ -27,6 +27,8 @@ import java.awt.Color
 
 class GameListener : Listener {
 
+    var countdown = 15;
+
     @EventHandler
     fun onGameStart(event: GameStartEvent) {
         for (player in Bukkit.getOnlinePlayers()) {
@@ -47,6 +49,9 @@ class GameListener : Listener {
             }
         }
         CTF.instance.gameManager.setState(State.GAME)
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
+
+        }, 20L, 20L)
 
 
         /*/Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {

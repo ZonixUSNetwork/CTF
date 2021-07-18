@@ -5,6 +5,8 @@ import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.scheduler.BukkitScheduler
+import org.bukkit.scheduler.BukkitTask
 import us.zonix.ctf.CTF
 import us.zonix.ctf.events.GameStartEvent
 import us.zonix.ctf.game.State

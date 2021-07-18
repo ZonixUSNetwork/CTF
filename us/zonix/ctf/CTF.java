@@ -6,10 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import us.zonix.ctf.listener.FlagListener;
 import us.zonix.ctf.listener.GameListener;
 import us.zonix.ctf.listener.JoinListener;
-import us.zonix.ctf.manager.FlagManager;
-import us.zonix.ctf.manager.GameManager;
-import us.zonix.ctf.manager.KitManager;
-import us.zonix.ctf.manager.MapManager;
+import us.zonix.ctf.manager.*;
 import us.zonix.ctf.nametags.Nametags;
 import us.zonix.ctf.scoreboard.Scoreboard;
 import us.zonix.ctf.utils.RandomFireWork;
@@ -23,6 +20,7 @@ public class CTF extends JavaPlugin {
     public MapManager mapManager = new MapManager();
     public FlagManager flagManager = new FlagManager();
     public KitManager kitManager = new KitManager();
+    public EconomyManager economyManager = new EconomyManager();
 
 
     @Override

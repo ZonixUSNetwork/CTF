@@ -54,4 +54,5 @@ public class InstantFirework {
         return nmsClass;
     }
 
+
 }

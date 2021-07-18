@@ -14,8 +14,12 @@ class CTFScoreGetter : ScoreGetter {
 
     override fun getScores(scores: LinkedList<String>, player: Player): Array<String?> {
         if (CTF.instance.gameManager.getState() == State.LOBBY) {
-            scores.add("§fWaiting for players")
-            scores.add("§fPlayers§7: §4" + Bukkit.getOnlinePlayers().size)
+            if (Bukkit.getOnlinePlayers().size != 8) {
+                scores.add("§fWaiting for players")
+                scores.add("§fPlayers§7: §4" + Bukkit.getOnlinePlayers().size + "/8")
+            } else {
+                scores.add("")
+            }
         }
         if (CTF.instance.gameManager.getState() == State.GAME) {
             scores.add("§9§lBlue Team:")
@@ -37,6 +41,7 @@ class CTFScoreGetter : ScoreGetter {
                 scores.add("§4§lStats:")
                 scores.add("  §fKills: §c" + CTF.instance.gameManager.getKills(player))
                 scores.add("  §fDeaths: §c" + CTF.instance.gameManager.getDeaths(player))
+                scores.add("  §fBalance: §c" + CTF.instance.economyManager.getBalance(player))
             } else {
                 scores.add("§4§lMod Mode:")
                 scores.add("  §fVanish§7: " + (
