@@ -25,6 +25,23 @@ class MapManager {
         }
     }
 
+    fun getMapSpawn(): Location? {
+        try {
+            var world = Bukkit.getWorld(CTF.instance.config.getString("spawnpoint.lobby.world"))
+
+            var location = Location(
+                world,
+                CTF.instance.config.getInt("spawnpoint.lobby.x").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.lobby.y").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.lobby.z").toDouble(),
+            )
+            return location
+        } catch (error: Exception) {
+            ServerUtils.sendToAdmins("§f[§7§lSpawnpoint§f] §fThere was an issue whilst getting lobby's spawnpoint. Stacktrace: " + error.stackTraceToString())
+            return Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0)
+        }
+    }
+
     fun getBlueSpawn(): Location? {
         try {
             var world = Bukkit.getWorld(CTF.instance.config.getString("spawnpoint.blue.world"))

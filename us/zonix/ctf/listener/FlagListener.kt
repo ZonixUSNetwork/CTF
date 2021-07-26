@@ -15,11 +15,15 @@ class FlagListener : Listener {
         var player = event.player
         when (stolenFrom) {
             Team.BLUE -> {
+                Bukkit.broadcastMessage(" ")
                 Bukkit.broadcastMessage("§c${player.name} §fpicked up the §9§lBLUE §fflag.")
+                Bukkit.broadcastMessage(" ")
                 CTF.instance.kitManager.giveBlueFlag(player, Team.BLUE)
             }
             Team.RED -> {
+                Bukkit.broadcastMessage(" ")
                 Bukkit.broadcastMessage("§9${player.name} §fpicked up the §c§lRED §fflag.")
+                Bukkit.broadcastMessage(" ")
                 CTF.instance.kitManager.giveRedFlag(player, Team.RED)
             }
         }

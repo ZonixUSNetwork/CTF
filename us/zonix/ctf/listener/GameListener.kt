@@ -273,9 +273,11 @@ class GameListener : Listener {
         }
         if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
             CTF.instance.gameManager.removeRed(player)
+            Bukkit.broadcastMessage("§c" + player.name + " §fhas disconnected.")
         }
         if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
             CTF.instance.gameManager.removeBlue(player)
+            Bukkit.broadcastMessage("§9" + player.name + " §fhas disconnected.")
         }
     }
 }

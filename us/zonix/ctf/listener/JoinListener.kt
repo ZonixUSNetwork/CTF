@@ -11,6 +11,7 @@ import us.zonix.ctf.CTF
 import us.zonix.ctf.events.GameStartEvent
 import us.zonix.ctf.game.State
 import us.zonix.ctf.game.Team
+import us.zonix.ctf.utils.message.MessageUtils
 
 class JoinListener : Listener {
 
@@ -18,37 +19,44 @@ class JoinListener : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         event.joinMessage = null
         val player = event.player
-        if (CTF.instance.gameManager.getState() == State.LOBBY) {
-            if (!player.hasPermission("rank.staff"))
-                Bukkit.broadcastMessage("§a${player.name} has joined the game")
-            for (i in 0..3) {
-                player.inventory.armorContents[i] = null
+        when (CTF.instance.gameManager.getState()) {
+            State.LOBBY -> {
+                if (!player.hasPermission("rank.staff"))
+                    Bukkit.broadcastMessage("§a${player.name} has joined the game")
+                for (i in 0..3) {
+                    player.inventory.armorContents[i] = null
+                }
+                player.health = 20.0
+                player.foodLevel = 20
+                CTF.instance.kitManager.clearInventory(player)
+                player.teleport(CTF.instance.mapManager.getMapSpawn())
+
+                if (Bukkit.getOnlinePlayers().size >= 8) {
+                    Bukkit.broadcastMessage("§aGame is starting in 10s.")
+                    Bukkit.getScheduler().runTaskLater(CTF.instance, {
+                        Bukkit.getPluginManager().callEvent(GameStartEvent())
+                    }, 100L)
+                }
             }
-            player.health = 20.0
-            player.foodLevel = 20
-            CTF.instance.kitManager.clearInventory(player)
-            player.teleport(Location(Bukkit.getWorld("world"), 0.5, 135.0, -3.5))
-            if (Bukkit.getOnlinePlayers().size >= 8) {
-                Bukkit.broadcastMessage("§aGame is starting in 10s.")
-                Bukkit.getScheduler().runTaskLater(CTF.instance, {
-                    Bukkit.getPluginManager().callEvent(GameStartEvent())
-                }, 100L)
+            State.GAME -> {
+                CTF.instance.gameManager.addToTeam(player)
+                if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
+                    CTF.instance.kitManager.giveRedKit(player, Team.RED)
+                }
+                if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
+                    CTF.instance.kitManager.giveBlueKit(player, Team.BLUE)
+                }
             }
-            return
-        }
-        if (CTF.instance.gameManager.getState() == State.GAME) {
-            CTF.instance.gameManager.addToTeam(player)
-            if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
-                CTF.instance.kitManager.giveRedKit(player, Team.RED)
+            State.END -> {
+                player.teleport(CTF.instance.mapManager.getMapSpawn())
+                player.health = 20.0
+                player.foodLevel = 20
+                CTF.instance.kitManager.clearInventory(player)
+                player.sendMessage(" ")
+                MessageUtils.sendCenteredMessage(player, "§c§lPlease wait.")
+                MessageUtils.sendCenteredMessage(player, "§fThe game has §brecently §fended, please wait for a new round to start.")
+                player.sendMessage(" ")
             }
-            if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
-                CTF.instance.kitManager.giveBlueKit(player, Team.BLUE)
-            }
-            return
-        }
-        if (CTF.instance.gameManager.getState() == State.END) {
-            player.kickPlayer("§cThis game has ended. Please wait for a new one to start.")
-            return
         }
     }
 }

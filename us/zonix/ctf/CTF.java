@@ -10,6 +10,7 @@ import us.zonix.ctf.listener.JoinListener;
 import us.zonix.ctf.manager.*;
 import us.zonix.ctf.nametags.Nametags;
 import us.zonix.ctf.scoreboard.Scoreboard;
+import us.zonix.ctf.teamupgrades.Upgrade;
 import us.zonix.ctf.utils.RandomFireWork;
 
 import java.util.Map;
@@ -24,6 +25,7 @@ public class CTF extends JavaPlugin {
     public FlagManager flagManager = new FlagManager();
     public KitManager kitManager = new KitManager();
     public EconomyManager economyManager = new EconomyManager();
+    public TeamUpgradeManager upgradeManager = new TeamUpgradeManager();
 
 
     @Override

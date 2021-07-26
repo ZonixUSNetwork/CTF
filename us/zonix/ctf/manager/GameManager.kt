@@ -2,6 +2,7 @@ package us.zonix.ctf.manager
 
 import com.lunarclient.bukkitapi.LunarClientAPI
 import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
+import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -68,11 +69,13 @@ class GameManager {
 
     fun endGame(winner: Team) {
         gameState = State.END
+        /*/
+        todo: make it compatible with the new game system which allows games to continue without rebooting.
         Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
             var randomInt = kotlin.random.Random.nextInt(-100, 100)
             var location = Location(Bukkit.getWorld("world"), (0 + randomInt).toDouble(), 90.0, (0 + randomInt).toDouble())
             InstantFirework(FireworkEffect.builder().with(FireworkEffect.Type.BURST).withColor(RandomFireWork.getRandomColor()).build(), location)
-        }, 5L, 5L)
+        }, 5L, 5L)*/
         for (player in Bukkit.getOnlinePlayers()) {
             player.inventory.clear()
             player.allowFlight = true
@@ -89,7 +92,36 @@ class GameManager {
             }
 
         }
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "reboot 30s")
+        Bukkit.getScheduler().runTaskLater(CTF.instance, {
+            restartGame()
+        }, 20 * 30L) //20 ticks = 1s
+    }
+
+    fun restartGame() {
+        blue.clear();
+        red.clear()
+
+        //kills and deaths could just be set to 0, but that'd cause the map to grow in size as more players join, so it's just better to reset.
+        kills.clear()
+        deaths.clear()
+
+        CTF.instance.economyManager.economyMap.clear()
+        CTF.instance.upgradeManager.blueUpgrades.clear()
+        CTF.instance.upgradeManager.redUpgrades.clear()
+
+        CTF.instance.flagManager.blueFlagHolder = null
+        CTF.instance.flagManager.redFlagHolder = null
+
+
+
+        gameState = State.LOBBY
+
+
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.allowFlight = false
+            player.teleport(CTF.instance.mapManager.getMapSpawn())
+            CTF.instance.kitManager.clearInventory(player)
+        }
     }
 
     fun getRed(): Int {
@@ -128,6 +160,14 @@ class GameManager {
 
     fun setState(game: State) {
         gameState = game
+    }
+
+    fun getRedTeam(): ArrayList<UUID> {
+        return red;
+    }
+
+    fun getBlueTeam(): ArrayList<UUID> {
+        return blue;
     }
 
 }
