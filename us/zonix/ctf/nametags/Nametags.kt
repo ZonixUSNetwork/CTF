@@ -15,7 +15,7 @@ class Nametags : NameTagProvider("Nametags Provider", 5) {
         //val prefixColor = getNameColor(toRefresh, refreshFor)
         var color: ChatColor? = null
 
-        when (CTF.instance.gameManager.getTeam(toRefresh)) {
+        /*/when (CTF.instance.gameManager.getTeam(toRefresh)) {
             Team.RED -> {
                 color = ChatColor.RED
                 return createNameTag(color.toString().replace("&", "§"), "")
@@ -28,7 +28,7 @@ class Nametags : NameTagProvider("Nametags Provider", 5) {
                 color = ChatColor.GRAY
                 return createNameTag(color.toString().replace("&", "§"), "")
             }
-        }
-        //return createNameTag(ChatColor.GRAY.toString().replace("&", "§"), "")
+        }*/
+        return createNameTag(ChatColor.WHITE.toString(), "")
     }
 }

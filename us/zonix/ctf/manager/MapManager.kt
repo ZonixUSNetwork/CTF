@@ -2,13 +2,77 @@ package us.zonix.ctf.manager
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import us.zonix.ctf.CTF
+import us.zonix.ctf.utils.ServerUtils
+import java.lang.Exception
 
 class MapManager {
 
-    val redFlag = Location(Bukkit.getWorld("world"), -31.5, 66.0, -87.5)
-    val blueFlag = Location(Bukkit.getWorld("world"), -31.5, 66.0, -87.5)
-    val redSpawn = Location(Bukkit.getWorld("world"), -38.5, 72.0, 76.5)
-    val blueSpawn = Location(Bukkit.getWorld("world"), 39.5, 72.0, -83.5)
+    fun getRedSpawn(): Location? {
+        try {
+            var world = Bukkit.getWorld(CTF.instance.config.getString("spawnpoint.red.world"))
 
+            var location = Location(
+                world,
+                CTF.instance.config.getInt("spawnpoint.red.x").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.red.y").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.red.z").toDouble(),
+            )
+            return location
+        } catch (error: Exception) {
+            ServerUtils.sendToAdmins("§f[§c§lSpawnpoint§f] §fThere was an issue whilst getting red's spawnpoint. Stacktrace: " + error.stackTraceToString())
+            return Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0)
+        }
+    }
 
+    fun getBlueSpawn(): Location? {
+        try {
+            var world = Bukkit.getWorld(CTF.instance.config.getString("spawnpoint.blue.world"))
+
+            var location = Location(
+                world,
+                CTF.instance.config.getInt("spawnpoint.blue.x").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.blue.y").toDouble(),
+                CTF.instance.config.getInt("spawnpoint.blue.z").toDouble(),
+            )
+            return location
+        } catch (error: Exception) {
+            ServerUtils.sendToAdmins("§f[§9§lSpawnpoint§f] §fThere was an issue whilst getting blue's spawnpoint. Stacktrace: " + error.stackTraceToString())
+            return Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0)
+        }
+    }
+
+    fun getBlueFlag(): Location? {
+        try {
+            var world = Bukkit.getWorld(CTF.instance.config.getString("flag.blue.world"))
+
+            var location = Location(
+                world,
+                CTF.instance.config.getInt("flag.blue.x").toDouble(),
+                CTF.instance.config.getInt("flag.blue.y").toDouble(),
+                CTF.instance.config.getInt("flag.blue.z").toDouble(),
+            )
+            return location
+        } catch (error: Exception) {
+            ServerUtils.sendToAdmins("§f[§9§lFlag§f] §fThere was an issue whilst getting blue's flag. Stacktrace: " + error.stackTraceToString())
+            return Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0)
+        }
+    }
+
+    fun getRedFlag(): Location? {
+        try {
+            var world = Bukkit.getWorld(CTF.instance.config.getString("flag.red.world"))
+
+            var location = Location(
+                world,
+                CTF.instance.config.getInt("flag.red.x").toDouble(),
+                CTF.instance.config.getInt("flag.red.y").toDouble(),
+                CTF.instance.config.getInt("flag.red.z").toDouble(),
+            )
+            return location
+        } catch (error: Exception) {
+            ServerUtils.sendToAdmins("§f[§9§lFlag§f] §fThere was an issue whilst getting red's flag. Stacktrace: " + error.stackTraceToString())
+            return Location(Bukkit.getWorld("world"), 0.0, 100.0, 0.0)
+        }
+    }
 }

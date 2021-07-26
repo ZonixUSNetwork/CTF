@@ -2,6 +2,7 @@ package us.zonix.ctf;
 
 import cc.fyre.proton.Proton;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import us.zonix.ctf.listener.FlagListener;
 import us.zonix.ctf.listener.GameListener;
@@ -16,6 +17,8 @@ import java.util.Map;
 public class CTF extends JavaPlugin {
 
     public static CTF instance;
+
+    public FileConfiguration config = getConfig();
     public GameManager gameManager = new GameManager();
     public MapManager mapManager = new MapManager();
     public FlagManager flagManager = new FlagManager();
@@ -31,6 +34,7 @@ public class CTF extends JavaPlugin {
         Proton.getInstance().getNameTagHandler().registerProvider(new Nametags());
         RandomFireWork.addColors();
         registerListeners();
+        saveConfig();
     }
 
     private void registerListeners() {

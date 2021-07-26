@@ -78,10 +78,14 @@ class GameManager {
             player.allowFlight = true
             if (getTeam(player) == winner) {
                 LunarClientAPI.getInstance()
-                    .sendPacket(player, LCPacketTitle("§6§lVICTORY!", "§fYour team §bcaptured§f the §cenemy§f's flag!", 5, 1, 1))
+                    .sendPacket(player, LCPacketTitle("title", "§6§lVICTORY!", 5000, 1, 1))
+                LunarClientAPI.getInstance()
+                    .sendPacket(player, LCPacketTitle("subtitle", "§fYour team §bcaptured§f the §cenemy§f's flag!", 5000, 1, 1))
             } else {
                 LunarClientAPI.getInstance()
-                    .sendPacket(player, LCPacketTitle("§c§lGAME OVER!", "§fYour flag was §bcaptured§f by the §cenemy team§f.", 5, 1, 1))
+                    .sendPacket(player, LCPacketTitle("title", "§c§lGAME OVER!", 5000, 1, 1))
+                LunarClientAPI.getInstance()
+                    .sendPacket(player, LCPacketTitle("subtitle", "§fYour flag was §bcaptured§f by the §cenemy team§f.", 500, 1, 1))
             }
 
         }

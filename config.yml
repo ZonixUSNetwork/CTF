@@ -1,0 +1,24 @@
+spawnpoint:
+  red:
+    x: 0
+    y: 0
+    z: 0
+    world: "world"
+  blue:
+    x: 0
+    y: 0
+    z: 0
+    world: "world"
+
+flag:
+  red:
+    x: 0
+    y: 0
+    z: 0
+    world: "world"
+  blue:
+    x: 0
+    y: 0
+    z: 0
+    world: "world"
+

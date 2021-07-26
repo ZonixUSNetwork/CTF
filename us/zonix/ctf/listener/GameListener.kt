@@ -3,6 +3,7 @@ package us.zonix.ctf.listener
 import com.lunarclient.bukkitapi.LunarClientAPI
 import com.lunarclient.bukkitapi.`object`.LCWaypoint
 import com.lunarclient.bukkitapi.nethandler.client.LCPacketTitle
+import me.kansio.modmode.ModMode
 import org.bukkit.*
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -32,26 +33,28 @@ class GameListener : Listener {
     @EventHandler
     fun onGameStart(event: GameStartEvent) {
         for (player in Bukkit.getOnlinePlayers()) {
-            if (player.hasMetadata("modmode")) continue
+            if (ModMode.getInstance().modModeManager.isInModMode(player)) continue
             CTF.instance.gameManager.addToTeam(player)
             CTF.instance.gameManager.setKills(player, 0)
             CTF.instance.gameManager.setDeaths(player, 0)
-            LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Red Flag", Location(Bukkit.getWorld("world"), 32.0, 66.0, 80.0), Color.RED.rgb, true))
-            LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Blue Flag", Location(Bukkit.getWorld("world"), -31.5, 66.0, -87.5), Color.BLUE.rgb, true))
+            LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Red Flag", CTF.instance.mapManager.getRedFlag(), Color.RED.rgb, true))
+            LunarClientAPI.getInstance().sendWaypoint(player, LCWaypoint("Blue Flag", CTF.instance.mapManager.getBlueFlag(), Color.BLUE.rgb, true))
             if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
-                player.teleport(Location(Bukkit.getWorld("world"), -38.5, 72.0, 76.5))
+                player.teleport(CTF.instance.mapManager.getRedSpawn())
                 CTF.instance.kitManager.giveRedKit(player, Team.RED)
-                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("§aGame Started!", "§fYou are on the §cRED §fteam.", 5, 1, 1))
+                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("title", "§a§lSTARTED", 5000, 1, 1))
+                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("subtitle", "§fYou are on the §cRED §fteam.", 5000, 1, 1))
             } else if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
-                player.teleport(Location(Bukkit.getWorld("world"), 39.5, 72.0, -83.5))
+                player.teleport(CTF.instance.mapManager.getBlueSpawn())
                 CTF.instance.kitManager.giveBlueKit(player, Team.BLUE)
-                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("§aGame Started!", "§fYou are on the §9BLUE §fteam.", 5, 1, 1))
+                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("title", "§a§lSTARTED", 5000, 1, 1))
+                LunarClientAPI.getInstance().sendPacket(player, LCPacketTitle("subtitle", "§fYou are on the §9BLUE §fteam.", 5000, 1, 1))
             }
         }
         CTF.instance.gameManager.setState(State.GAME)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
+        /*/Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
 
-        }, 20L, 20L)
+        }, 20L, 20L)*/
 
 
         /*/Bukkit.getScheduler().scheduleSyncRepeatingTask(CTF.instance, {
@@ -216,7 +219,7 @@ class GameListener : Listener {
             event.isCancelled = true
         }
         var player = event.entity as Player
-        //Bukkit.broadcastMessage("{${player.health - event.damage}}")
+
         if ((player.health - event.damage) <= 0.0) {
             event.isCancelled = true
             player.health = 20.0
@@ -227,9 +230,9 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§9${player.name} §fhas died with the §c§lRED §fflag")
                 Bukkit.broadcastMessage("§fThe §cflag §fhas been returned.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
-                player.teleport(Location(Bukkit.getWorld("world"), -38.5, 72.0, 76.5))
+                player.teleport(CTF.instance.mapManager.getBlueSpawn())
                 SoundUtil.playSound(Sound.IRONGOLEM_DEATH)
-                CTF.instance.kitManager.giveRedKit(player, Team.RED)
+                CTF.instance.kitManager.giveBlueKit(player, Team.RED)
                 return
             }
             if (CTF.instance.flagManager.blueFlagHolder == player) {
@@ -238,20 +241,20 @@ class GameListener : Listener {
                 Bukkit.broadcastMessage("§c${player.name} §fhas died with the §9§lBLUE §fflag")
                 Bukkit.broadcastMessage("§fThe §cflag §fhas been returned.")
                 Bukkit.broadcastMessage("§7§m------------------------------------------")
-                player.teleport(Location(Bukkit.getWorld("world"), 39.5, 72.0, -83.5))
+                player.teleport(CTF.instance.mapManager.getRedSpawn())
                 SoundUtil.playSound(Sound.IRONGOLEM_DEATH)
-                CTF.instance.kitManager.giveBlueKit(player, Team.RED)
+                CTF.instance.kitManager.giveRedKit(player, Team.RED)
                 return
             }
 
             if (CTF.instance.gameManager.getTeam(player) == Team.RED) {
                 CTF.instance.kitManager.giveRedKit(player, Team.RED)
-                player.teleport(Location(Bukkit.getWorld("world"), -38.5, 72.0, 76.5))
+                player.teleport(CTF.instance.mapManager.getRedSpawn())
                 return
             }
             if (CTF.instance.gameManager.getTeam(player) == Team.BLUE) {
                 CTF.instance.kitManager.giveBlueKit(player, Team.BLUE)
-                player.teleport(Location(Bukkit.getWorld("world"), 39.5, 72.0, -83.5))
+                player.teleport(CTF.instance.mapManager.getBlueSpawn())
                 return
             }
         }
