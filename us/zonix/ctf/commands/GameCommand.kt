@@ -1,6 +1,7 @@
 package us.zonix.ctf.commands
 
 import cc.fyre.proton.command.Command
+import com.lunarclient.bukkitapi.LunarClientAPI
 import org.apache.commons.lang.StringUtils
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -42,6 +43,7 @@ object GameCommand {
         CTF.instance.config.set("spawnpoint.lobby.y", sender.location.y.roundToInt())
         CTF.instance.config.set("spawnpoint.lobby.z", sender.location.z.roundToInt())
         CTF.instance.config.set("spawnpoint.lobby.world", sender.world.name)
+        CTF.instance.saveConfig()
     }
 
     @JvmStatic
